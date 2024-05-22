@@ -1,4 +1,4 @@
-package med.voll.api.model.medic;
+package med.voll.api.model.patient;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,37 +6,36 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.dto.MedicRegisterDataDTO;
+import med.voll.api.dto.PatientRegisterDataDTO;
 import med.voll.api.model.adress.CompleteAdress;
+import med.voll.api.model.medic.Speciality;
 
 @Entity
-@Table(name = "medicos")
+@Table(name = "pacientes")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Medic {
+public class Patient {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
     private String email;
-    private String crm;
+    private String CPF;
     private String telefone;
-
-    @Enumerated(EnumType.STRING)
-    private Speciality especialidade;
 
     @Embedded
     private CompleteAdress endereco;
 
 
-    public Medic(MedicRegisterDataDTO dataDTO) {
+    public Patient(PatientRegisterDataDTO dataDTO) {
         this.nome = dataDTO.nome();
         this.email = dataDTO.email();
-        this.crm = dataDTO.crm();
-        this.especialidade = dataDTO.especialidade();
+        this.CPF = dataDTO.cpf();
         this.endereco = new CompleteAdress(dataDTO.endereco());
         this.telefone =dataDTO.telefone();
     }
+
 }

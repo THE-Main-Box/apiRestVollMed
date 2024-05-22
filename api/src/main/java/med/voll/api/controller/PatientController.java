@@ -1,11 +1,10 @@
 package med.voll.api.controller;
 
+
 import jakarta.validation.Valid;
-import med.voll.api.dto.MedicRegisterDataDTO;
-import med.voll.api.model.adress.CompleteAdress;
-import med.voll.api.model.medic.Medic;
-import med.voll.api.model.medic.Speciality;
-import med.voll.api.repository.MedicRepository;
+import med.voll.api.dto.PatientRegisterDataDTO;
+import med.voll.api.model.patient.Patient;
+import med.voll.api.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,19 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/medic")
-public class MedicController {
+@RequestMapping("/patient")
+public class PatientController {
 
     @Autowired
-    private MedicRepository repository;
+    private PatientRepository repository;
 
     @PostMapping("/register")
-    public String register(@RequestBody @Valid MedicRegisterDataDTO dataDTO){
+    public String registerPatient(@RequestBody @Valid PatientRegisterDataDTO dataDTO){
         try {
-            repository.save(new Medic(dataDTO));
+            repository.save(new Patient(dataDTO));
             return "Cadastro concluído com sucesso!";
         }catch (Exception e){
-         return "Houve um erro no seu cadastro tente novamente: "+ e;
+            return "Houve um erro no seu cadastro tente novamente: "+ e;
         }
     }
 
