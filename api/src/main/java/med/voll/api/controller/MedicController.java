@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.dto.medic.MedicListDataDTO;
@@ -52,12 +53,22 @@ public class MedicController {
         return repository.findByEspecialidade(especialidade, page).map(MedicListDataDTO::new);
     }
 
+
+/*atualiza os capos atualizaveis da entidade medic
+* e por estar com a anotação transictional ela atualiza o banco automaticamente */
     @PutMapping("/{id}/update")
     @Transactional
     public void updateMedic(@PathVariable Long id, @RequestBody @Valid MedicUpdateDataDTO dataDTO) {
         Medic medic = repository.getReferenceById(id);
         medic.updateData(dataDTO);
 
+    }
+
+    @DeleteMapping("/{id}/delete")
+    @Transactional
+    public void deleteMedicById(@PathVariable Long id){
+        Medic medic = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medic not found"));
+        repository.delete(medic);
     }
 
 }

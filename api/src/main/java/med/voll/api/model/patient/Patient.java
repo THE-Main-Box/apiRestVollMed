@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.dto.patient.PatientRegisterDataDTO;
+import med.voll.api.dto.patient.PatientUpdateData;
 import med.voll.api.model.adress.CompleteAdress;
 
 @Entity
@@ -34,6 +35,12 @@ public class Patient {
         this.CPF = dataDTO.cpf();
         this.endereco = new CompleteAdress(dataDTO.endereco());
         this.telefone =dataDTO.telefone();
+    }
+
+    public void updateData(PatientUpdateData dataDTO){
+        this.nome = dataDTO.nome();
+        this.endereco = new CompleteAdress(dataDTO.endereco());
+        this.telefone = dataDTO.telefone();
     }
 
 }
