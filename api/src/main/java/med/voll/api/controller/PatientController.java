@@ -1,6 +1,7 @@
 package med.voll.api.controller;
 
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.dto.patient.PatientDataDTO;
@@ -43,4 +44,12 @@ public class PatientController {
         Patient patient = repository.getReferenceById(id);
         patient.updateData(updateData);
     }
+
+    @DeleteMapping("/{id}/delete")
+    @Transactional
+    public void deletePatient(@PathVariable Long id){
+        Patient patientFound = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medic not found"));
+        repository.delete(patientFound);
+    }
+
 }

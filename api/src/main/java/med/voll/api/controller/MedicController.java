@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import med.voll.api.dto.medic.MedicListDataDTO;
 import med.voll.api.dto.medic.MedicRegisterDataDTO;
 import med.voll.api.dto.medic.MedicUpdateDataDTO;
-import med.voll.api.model.adress.CompleteAdress;
 import med.voll.api.model.medic.Medic;
 import med.voll.api.model.medic.Speciality;
 import med.voll.api.repository.MedicRepository;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 
 @RestController
@@ -66,7 +63,7 @@ public class MedicController {
 
     @DeleteMapping("/{id}/delete")
     @Transactional
-    public void deleteMedicById(@PathVariable Long id){
+    public void deleteMedic(@PathVariable Long id){
         Medic medic = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medic not found"));
         repository.delete(medic);
     }
