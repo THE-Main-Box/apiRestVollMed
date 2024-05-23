@@ -1,11 +1,9 @@
 package med.voll.api.model.medic;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import med.voll.api.dto.MedicRegisterDataDTO;
+import lombok.*;
+import med.voll.api.dto.medic.MedicRegisterDataDTO;
+import med.voll.api.dto.medic.MedicUpdateDataDTO;
 import med.voll.api.model.adress.CompleteAdress;
 
 @Entity
@@ -38,5 +36,25 @@ public class Medic {
         this.especialidade = dataDTO.especialidade();
         this.endereco = new CompleteAdress(dataDTO.endereco());
         this.telefone =dataDTO.telefone();
+    }
+
+    public void updateData(MedicUpdateDataDTO dataDTO){
+        this.email = dataDTO.email();
+        this.nome = dataDTO.nome();
+        this.endereco = new CompleteAdress(dataDTO.endereco());
+        this.telefone = dataDTO.telefone();
+    }
+
+    @Override
+    public String toString() {
+        return "Medic{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", crm='" + crm + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", especialidade=" + especialidade +
+                ", endereco=" + endereco +
+                '}';
     }
 }

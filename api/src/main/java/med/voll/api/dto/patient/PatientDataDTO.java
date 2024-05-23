@@ -1,4 +1,4 @@
-package med.voll.api.dto;
+package med.voll.api.dto.patient;
 
 import med.voll.api.model.patient.Patient;
 

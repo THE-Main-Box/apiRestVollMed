@@ -2,8 +2,10 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.dto.MedicListDataDTO;
-import med.voll.api.dto.MedicRegisterDataDTO;
+import med.voll.api.dto.medic.MedicListDataDTO;
+import med.voll.api.dto.medic.MedicRegisterDataDTO;
+import med.voll.api.dto.medic.MedicUpdateDataDTO;
+import med.voll.api.model.adress.CompleteAdress;
 import med.voll.api.model.medic.Medic;
 import med.voll.api.model.medic.Speciality;
 import med.voll.api.repository.MedicRepository;
@@ -12,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
@@ -40,12 +44,29 @@ public class MedicController {
         return repository.findAll(page).map(MedicListDataDTO::new);
     }
 
-/*    faz a mesma coisa que o método acima porém,
-*     filtra pelos campos de especialidade e retorna apenas os medicos
-*     com a especialidade especificada */
+    /*    faz a mesma coisa que o método acima porém,
+     *     filtra pelos campos de especialidade e retorna apenas os medicos
+     *     com a especialidade especificada */
     @GetMapping("/list/{especialidade}")
     public Page<MedicListDataDTO> listMedicBySpeciality(@PathVariable Speciality especialidade, @PageableDefault(size = 10, sort = "nome") Pageable page) {
         return repository.findByEspecialidade(especialidade, page).map(MedicListDataDTO::new);
+    }
+
+    @PutMapping("/{id}/update")
+    @Transactional
+    public void updateMedic(@PathVariable Long id, @RequestBody MedicUpdateDataDTO dataDTO) {
+        Optional<Medic> medic = repository.findById(id);
+
+        System.out.println(medic);
+
+        if (medic.isPresent()) {
+            Medic medicFound = medic.get();
+
+            medicFound.updateData(dataDTO);
+
+            System.out.println(medicFound);
+        }
+
     }
 
 }
