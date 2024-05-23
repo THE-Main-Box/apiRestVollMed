@@ -54,18 +54,9 @@ public class MedicController {
 
     @PutMapping("/{id}/update")
     @Transactional
-    public void updateMedic(@PathVariable Long id, @RequestBody MedicUpdateDataDTO dataDTO) {
-        Optional<Medic> medic = repository.findById(id);
-
-        System.out.println(medic);
-
-        if (medic.isPresent()) {
-            Medic medicFound = medic.get();
-
-            medicFound.updateData(dataDTO);
-
-            System.out.println(medicFound);
-        }
+    public void updateMedic(@PathVariable Long id, @RequestBody @Valid MedicUpdateDataDTO dataDTO) {
+        Medic medic = repository.getReferenceById(id);
+        medic.updateData(dataDTO);
 
     }
 

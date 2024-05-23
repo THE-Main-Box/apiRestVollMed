@@ -10,13 +10,15 @@ public record MedicUpdateDataDTO(
         @NotBlank
         String nome,
 
-        @NotBlank @Email
+        @NotBlank
+        @Email
         String email,
 
         @NotBlank
         String telefone,
 
-        @NotNull
         @Valid
-        CompleteAdressRec endereco) {
+        @NotNull
+        CompleteAdressRec endereco
+) {
 }
