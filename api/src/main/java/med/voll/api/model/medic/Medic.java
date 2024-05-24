@@ -14,13 +14,16 @@ import med.voll.api.model.adress.CompleteAdress;
 @EqualsAndHashCode(of = "id")
 public class Medic {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
     private String email;
     private String crm;
     private String telefone;
+    @Setter
+    private boolean ativo;
 
     @Enumerated(EnumType.STRING)
     private Speciality especialidade;
@@ -35,10 +38,11 @@ public class Medic {
         this.crm = dataDTO.crm();
         this.especialidade = dataDTO.especialidade();
         this.endereco = new CompleteAdress(dataDTO.endereco());
-        this.telefone =dataDTO.telefone();
+        this.telefone = dataDTO.telefone();
+        this.ativo = true;
     }
 
-    public void updateData(MedicUpdateDataDTO dataDTO){
+    public void updateData(MedicUpdateDataDTO dataDTO) {
         this.email = dataDTO.email();
         this.nome = dataDTO.nome();
         this.endereco = new CompleteAdress(dataDTO.endereco());

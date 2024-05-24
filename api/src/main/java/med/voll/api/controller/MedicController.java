@@ -39,7 +39,7 @@ public class MedicController {
     //      mapeia o banco para retornar uma lista de médicos e depois converte para uma DTO
     @GetMapping("/list")
     public Page<MedicListDataDTO> listMedic(@PageableDefault(size = 10, sort = "nome") Pageable page) {
-        return repository.findAll(page).map(MedicListDataDTO::new);
+        return repository.findByAtivo(true, page).map(MedicListDataDTO::new);
     }
 
     /*    faz a mesma coisa que o método acima porém,
@@ -47,7 +47,7 @@ public class MedicController {
      *     com a especialidade especificada */
     @GetMapping("/list/{especialidade}")
     public Page<MedicListDataDTO> listMedicBySpeciality(@PathVariable Speciality especialidade, @PageableDefault(size = 10, sort = "nome") Pageable page) {
-        return repository.findByEspecialidade(especialidade, page).map(MedicListDataDTO::new);
+        return repository.findByEspecialidadeAndAtivo(especialidade, true, page).map(MedicListDataDTO::new);
     }
 
 
@@ -65,7 +65,7 @@ public class MedicController {
     @Transactional
     public void deleteMedic(@PathVariable Long id){
         Medic medic = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medic not found"));
-        repository.delete(medic);
+        medic.setAtivo(false);
     }
 
 }
