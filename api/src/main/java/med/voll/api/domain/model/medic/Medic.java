@@ -1,10 +1,10 @@
-package med.voll.api.model.medic;
+package med.voll.api.domain.model.medic;
 
 import jakarta.persistence.*;
 import lombok.*;
-import med.voll.api.dto.medic.MedicRegisterDataDTO;
-import med.voll.api.dto.medic.MedicUpdateDataDTO;
-import med.voll.api.model.adress.CompleteAdress;
+import med.voll.api.domain.model.adress.CompleteAdress;
+import med.voll.api.domain.dto.medic.MedicRegisterDataDTO;
+import med.voll.api.domain.dto.medic.MedicUpdateDataDTO;
 
 @Entity
 @Table(name = "medicos")

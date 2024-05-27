@@ -1,7 +1,7 @@
-package med.voll.api.repository;
+package med.voll.api.infra.repository;
 
-import med.voll.api.model.medic.Medic;
-import med.voll.api.model.medic.Speciality;
+import med.voll.api.domain.model.medic.Medic;
+import med.voll.api.domain.model.medic.Speciality;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
-package med.voll.api.repository;
+package med.voll.api.infra.repository;
 
-import med.voll.api.model.patient.Patient;
+import med.voll.api.domain.model.patient.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
