@@ -1,4 +1,4 @@
-package med.voll.api.infra;
+package med.voll.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,15 @@ public class ErrorDealer {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> MethodArgumentNotValid(MethodArgumentNotValidException e){
+    public ResponseEntity<Object> dealMethodArgumentNotValid(MethodArgumentNotValidException e){
         List<FieldError> errors = e.getFieldErrors();
 
         return ResponseEntity.badRequest().body(errors.stream().map(ValidationError::new).toList());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> dealRuntime(RuntimeException e){
+        return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
     private record ValidationError(String field, String message){
