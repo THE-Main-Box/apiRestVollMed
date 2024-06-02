@@ -1,4 +1,4 @@
-package med.voll.api.infra.service;
+package med.voll.api.infra.service.user;
 
 import med.voll.api.infra.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

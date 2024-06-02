@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,14 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDataDTO dataDTO){
+    public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationDataDTO dataDTO) {
         var token = new UsernamePasswordAuthenticationToken(dataDTO.login(), dataDTO.password());
         Authentication authentication = manager.authenticate(token);
+        User user = (User) authentication.getPrincipal();
 
-        String tokenToReturn = tokenService.generateToken((User) authentication.getPrincipal());
+        String tokenToReturn = tokenService.generateToken(user); // Aqui ocorre a geração do token
 
-        return ResponseEntity.ok(new TokenJWTDataDTO(tokenToReturn));
+        return ResponseEntity.ok(new TokenJWTDataDTO(tokenToReturn)); // Aqui você está retornando o token como string
     }
 
 }
