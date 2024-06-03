@@ -1,6 +1,5 @@
 package med.voll.api.infra.config.security;
 
-import med.voll.api.infra.repository.UserRepository;
 import med.voll.api.infra.service.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -24,28 +26,37 @@ public class SecurityConfiguration {
     private TokenService tokenService;
 
     @Autowired
-    private SecurityFilter securityFilter;
+    private PublicURIReader publicURIReader;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Bean
+    public List<String> publicURIs() throws IOException {
+        return publicURIReader.getPublicURIs();
+    }
+
+    @Bean
+    public SecurityFilter securityFilter() throws IOException {
+        return new SecurityFilter(publicURIs(), tokenService);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST , "/register").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> {
+                    try {
+                        publicURIs().forEach(u -> auth.requestMatchers(u).permitAll());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    auth.anyRequest().authenticated();
+                })
+                .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class);
 
-                .build();
+        return http.build();
     }
-
 
 
     @Bean

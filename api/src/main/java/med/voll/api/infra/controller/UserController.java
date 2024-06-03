@@ -44,7 +44,9 @@ public class UserController {
 
         URI uri = uriBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new TokenJWTDataDTO(tokenService.generateToken(user)));
+        String tokenToReturn = tokenService.generateToken(user);
+
+        return ResponseEntity.created(uri).body(new TokenJWTDataDTO(tokenToReturn));
     }
 
     @PostMapping("/login")
@@ -53,9 +55,9 @@ public class UserController {
         Authentication authentication = manager.authenticate(token);
         User user = (User) authentication.getPrincipal();
 
-        String tokenToReturn = tokenService.generateToken(user); // Aqui ocorre a geração do token
+        String tokenToReturn = tokenService.generateToken(user);
 
-        return ResponseEntity.ok(new TokenJWTDataDTO(tokenToReturn)); // Aqui você está retornando o token como string
+        return ResponseEntity.ok().body(new TokenJWTDataDTO(tokenToReturn));
     }
 
     @GetMapping("/{id}")

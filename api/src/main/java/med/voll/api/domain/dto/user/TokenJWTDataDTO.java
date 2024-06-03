@@ -1,4 +1,4 @@
 package med.voll.api.domain.dto.user;
 
-public record TokenJWTDataDTO(String tokenToReturn) {
+public record TokenJWTDataDTO(String tokenJWT) {
 }

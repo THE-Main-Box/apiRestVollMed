@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.Getter;
 import med.voll.api.domain.model.user.User;
 import med.voll.api.infra.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,15 @@ public class TokenService {
     private UserRepository userRepository;
 
     private String secret;
+    @Getter
+    private User secretOwner;
 
     private void setSecret(String token) {
         try {
             DecodedJWT decodedJWT = JWT.decode(token);
             String login = decodedJWT.getSubject();
-            this.secret = userRepository.findByLogin(login).getPassword();
+            secretOwner = (User) userRepository.findByLogin(login);
+            this.secret = secretOwner.getPassword();
 
         } catch (JWTDecodeException e) {
             throw new RuntimeException("Erro ao decodificar o token JWT: " + e.getMessage());
@@ -46,7 +50,7 @@ public class TokenService {
 
             return JWT.create()
                     .withIssuer("API voll.med")
-                    .withSubject(user.getLogin())
+                    .withSubject(user.getUsername())
                     .withClaim("id", user.getId())
                     .withExpiresAt(Date.from(expireAt))
                     .sign(algorithm);
@@ -58,6 +62,7 @@ public class TokenService {
     /*  utiliza a password disponibilizada pelo getSecret e o usa para setar o algoritimo
      *   para permitir a verificação do token passado*/
     public void validateToken(String token) {
+
         try {
             this.setSecret(token);
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -67,7 +72,7 @@ public class TokenService {
 
             verifier.verify(token);
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("TokenJWT Inválido ou expirado" + e);
+            throw new RuntimeException("Erro ao validar o token: "+e);
         }
     }
 
