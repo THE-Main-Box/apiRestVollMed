@@ -4,7 +4,7 @@ package med.voll.api.infra.controller;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.domain.dto.patient.PatientDataDTO;
+import med.voll.api.domain.dto.patient.PatientResponseDataDTO;
 import med.voll.api.domain.dto.patient.PatientDetailedDataDTO;
 import med.voll.api.domain.dto.patient.PatientRegisterDataDTO;
 import med.voll.api.domain.dto.patient.PatientUpdateData;
@@ -44,8 +44,8 @@ public class PatientController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<PatientDataDTO>> listPatient(@PageableDefault(sort = "nome") Pageable pageable) {
-        return ResponseEntity.ok(repository.findAll(pageable).map(PatientDataDTO::new));
+    public ResponseEntity<Page<PatientResponseDataDTO>> listPatient(@PageableDefault(sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(repository.findAll(pageable).map(PatientResponseDataDTO::new));
     }
 
     @PutMapping("/{id}/update")

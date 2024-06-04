@@ -23,19 +23,14 @@ import java.util.List;
 public class SecurityConfiguration {
 
     @Autowired
-    private TokenService tokenService;
+    private PublicURIReader publicURIReader;
 
     @Autowired
-    private PublicURIReader publicURIReader;
+    private SecurityFilter securityFilter;
 
     @Bean
     public List<String> publicURIs() throws IOException {
         return publicURIReader.getPublicURIs();
-    }
-
-    @Bean
-    public SecurityFilter securityFilter() throws IOException {
-        return new SecurityFilter(publicURIs(), tokenService);
     }
 
     @Bean
@@ -53,7 +48,7 @@ public class SecurityConfiguration {
                     }
                     auth.anyRequest().authenticated();
                 })
-                .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

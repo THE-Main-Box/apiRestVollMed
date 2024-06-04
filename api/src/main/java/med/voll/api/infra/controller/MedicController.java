@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.domain.dto.medic.MedicDetailedDataDTO;
-import med.voll.api.domain.dto.medic.MedicListDataDTO;
+import med.voll.api.domain.dto.medic.MedicResponseDataDTO;
 import med.voll.api.domain.dto.medic.MedicRegisterDataDTO;
 import med.voll.api.domain.dto.medic.MedicUpdateDataDTO;
 import med.voll.api.domain.model.medic.Medic;
@@ -45,9 +45,9 @@ public class MedicController {
 
     //      mapeia o banco para retornar uma lista de médicos e depois converte para uma DTO
     @GetMapping("/list")
-    public ResponseEntity<Page<MedicListDataDTO>> listMedic(@PageableDefault(size = 10, sort = "nome") Pageable page) {
+    public ResponseEntity<Page<MedicResponseDataDTO>> listMedic(@PageableDefault(size = 10, sort = "nome") Pageable page) {
 
-        return ResponseEntity.ok(repository.findByAtivo(true, page).map(MedicListDataDTO::new));
+        return ResponseEntity.ok(repository.findByAtivo(true, page).map(MedicResponseDataDTO::new));
 
     }
 
@@ -55,9 +55,9 @@ public class MedicController {
      *     filtrando pelos campos de especialidade e retorna apenas os medicos
      *     com a especialidade especificada */
     @GetMapping("/list/{especialidade}")
-    public ResponseEntity<Page<MedicListDataDTO>> listMedicBySpeciality(@PathVariable Speciality especialidade, @PageableDefault(size = 10, sort = "nome") Pageable page) {
+    public ResponseEntity<Page<MedicResponseDataDTO>> listMedicBySpeciality(@PathVariable Speciality especialidade, @PageableDefault(size = 10, sort = "nome") Pageable page) {
 
-        return ResponseEntity.ok((repository.findByEspecialidadeAndAtivo(especialidade, true, page).map(MedicListDataDTO::new)));
+        return ResponseEntity.ok((repository.findByEspecialidadeAndAtivo(especialidade, true, page).map(MedicResponseDataDTO::new)));
 
     }
 
