@@ -5,6 +5,10 @@ import lombok.*;
 import med.voll.api.domain.model.adress.CompleteAdress;
 import med.voll.api.domain.dto.medic.MedicRegisterDataDTO;
 import med.voll.api.domain.dto.medic.MedicUpdateDataDTO;
+import med.voll.api.domain.model.schedules.Schedule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "medicos")
@@ -31,6 +35,9 @@ public class Medic {
     @Embedded
     private CompleteAdress endereco;
 
+
+    @OneToMany(mappedBy = "medic",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Schedule> consults = new ArrayList<>();
 
     public Medic(MedicRegisterDataDTO dataDTO) {
         this.nome = dataDTO.nome();

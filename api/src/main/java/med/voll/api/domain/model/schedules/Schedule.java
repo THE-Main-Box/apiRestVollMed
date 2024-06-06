@@ -25,30 +25,22 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Autowired
-    private MedicRepository medicRepository;
-    @Autowired
-    private PatientRepository patientRepository;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "medico_id")
     private Medic medic;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "paciente_id")
     private Patient patient;
 
+    @Column(name = "data_hora")
     private LocalDateTime scheduleDateTime;
 
-
-
-    public Schedule(ScheduleRegisterDataDTO dataDTO) {
-        this.scheduleDateTime = dataDTO.scheduleDateTime();
-        this.setMedic(dataDTO.medicId());
-        this.setPatient(dataDTO.patientId());
-    }
-
-    public void setMedic(Long id){
-        this.medic = medicRepository.getReferenceById(id);
-    }
-
-    public void setPatient(Long id){
-        this.patient = patientRepository.getReferenceById(id);
+    public Schedule(LocalDateTime dateTime, Medic medicToSave, Patient patientToSave) {
+        this.scheduleDateTime = dateTime;
+        this.patient = patientToSave;
+        this.medic = medicToSave;
     }
 
 }

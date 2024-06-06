@@ -5,7 +5,9 @@ import jakarta.validation.Valid;
 import med.voll.api.domain.dto.schedules.ScheduleRegisterDataDTO;
 import med.voll.api.domain.dto.schedules.SchedulesDetailedData;
 import med.voll.api.domain.model.schedules.Schedule;
-import med.voll.api.infra.repository.ScheduleRepository;
+import med.voll.api.infra.repository.MedicRepository;
+import med.voll.api.infra.repository.PatientRepository;
+import med.voll.api.infra.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +20,13 @@ import java.net.URI;
 public class ScheduleController {
 
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private ScheduleService service;
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<Object> registerSchedule(@RequestBody @Valid ScheduleRegisterDataDTO dataDTO, UriComponentsBuilder builder){
-        System.out.println(dataDTO);
+    public ResponseEntity<Object> registerSchedule(@RequestBody @Valid ScheduleRegisterDataDTO dataDTO, UriComponentsBuilder builder) {
 
-        Schedule schedule = new Schedule(dataDTO);
+        Schedule schedule = service.validateSchedule(dataDTO);
 
         URI uri = builder.path("/schedule/{id}").buildAndExpand(schedule.getId()).toUri();
 
@@ -33,12 +34,9 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> showSchedule(@PathVariable Long id){
-        Schedule schedule = scheduleRepository.getReferenceById(id);
-        return ResponseEntity.ok().body(detailedData(schedule));
+    public ResponseEntity<Object> showSchedule(@PathVariable Long id) {
+        SchedulesDetailedData schedule = service.detailDataFrom(id);
+        return ResponseEntity.ok().body(schedule);
     }
 
-    private SchedulesDetailedData detailedData(Schedule schedule){
-        return new SchedulesDetailedData(schedule);
-    }
 }

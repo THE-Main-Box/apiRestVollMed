@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 public record SchedulesDetailedData(
         Long id,
-        MedicDetailedDataDTO medic,
-        PatientDetailedDataDTO patient,
-        LocalDateTime date
+        MedicDetailedDataDTO medico,
+        PatientDetailedDataDTO paciente,
+        LocalDateTime data
 ) {
     public SchedulesDetailedData(Schedule schedule) {
         this(
