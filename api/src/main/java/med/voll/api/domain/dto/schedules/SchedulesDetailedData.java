@@ -10,14 +10,16 @@ public record SchedulesDetailedData(
         Long id,
         MedicDetailedDataDTO medico,
         PatientDetailedDataDTO paciente,
-        LocalDateTime data
+        LocalDateTime data,
+        Boolean canceled
 ) {
     public SchedulesDetailedData(Schedule schedule) {
         this(
                 schedule.getId(),
                 new MedicDetailedDataDTO(schedule.getMedic()),
                 new PatientDetailedDataDTO(schedule.getPatient()),
-                schedule.getScheduleDateTime()
+                schedule.getScheduleDateTime(),
+                schedule.isCanceled()
         );
     }
 }

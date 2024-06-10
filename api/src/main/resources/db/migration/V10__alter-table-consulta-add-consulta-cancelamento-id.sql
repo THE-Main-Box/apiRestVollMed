@@ -1,0 +1,1 @@
+ALTER TABLE consultas ADD COLUMN cancelamento_consulta_id BIGSERIAL;

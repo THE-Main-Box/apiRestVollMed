@@ -1,12 +1,10 @@
 package med.voll.api.infra.controller;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.api.domain.dto.schedules.ScheduleCancelDataDTO;
 import med.voll.api.domain.dto.schedules.ScheduleRegisterDataDTO;
 import med.voll.api.domain.dto.schedules.SchedulesDetailedData;
 import med.voll.api.domain.model.schedules.Schedule;
-import med.voll.api.infra.repository.MedicRepository;
-import med.voll.api.infra.repository.PatientRepository;
 import med.voll.api.infra.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,6 @@ public class ScheduleController {
     private ScheduleService service;
 
     @PostMapping("/register")
-    @Transactional
     public ResponseEntity<Object> registerSchedule(@RequestBody @Valid ScheduleRegisterDataDTO dataDTO, UriComponentsBuilder builder) {
 
         Schedule schedule = service.validateSchedule(dataDTO);
@@ -31,6 +28,13 @@ public class ScheduleController {
         URI uri = builder.path("/schedule/{id}").buildAndExpand(schedule.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<Object> cancelSchedule(@RequestBody @Valid ScheduleCancelDataDTO dataDTO){
+        service.validateScheduleCancelment(dataDTO);
+
+        return ResponseEntity.ok().body("Consulta cancelada com sucesso");
     }
 
     @GetMapping("/{id}")

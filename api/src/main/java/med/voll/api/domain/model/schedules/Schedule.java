@@ -1,17 +1,9 @@
 package med.voll.api.domain.model.schedules;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import med.voll.api.domain.dto.schedules.ScheduleRegisterDataDTO;
+import lombok.*;
 import med.voll.api.domain.model.medic.Medic;
 import med.voll.api.domain.model.patient.Patient;
-import med.voll.api.infra.repository.MedicRepository;
-import med.voll.api.infra.repository.PatientRepository;
-import med.voll.api.infra.repository.ScheduleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
@@ -37,10 +29,27 @@ public class Schedule {
     @Column(name = "data_hora")
     private LocalDateTime scheduleDateTime;
 
+    @Setter
+    @Transient
+    @OneToOne(mappedBy = "schedule", cascade = CascadeType.MERGE)
+    private ScheduleCancel scheduleCancel;
+
+    @Setter
+    @Column(name = "cancelada")
+    private boolean isCanceled;
+
     public Schedule(LocalDateTime dateTime, Medic medicToSave, Patient patientToSave) {
         this.scheduleDateTime = dateTime;
         this.patient = patientToSave;
         this.medic = medicToSave;
+        this.scheduleCancel = null;
+        this.isCanceled = false;
+    }
+
+    public void cancel(String cancelMotive, LocalDateTime dateTimeNow) {
+        this.scheduleCancel = new ScheduleCancel(this, cancelMotive, dateTimeNow);
+        this.scheduleCancel.setSchedule(this);
+        this.isCanceled = true;
     }
 
 }

@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.SequencedCollection;
+import java.util.Optional;
 
 @Repository
 public interface MedicRepository extends JpaRepository<Medic, Long> {
@@ -22,15 +21,17 @@ public interface MedicRepository extends JpaRepository<Medic, Long> {
     @Query("""
             SELECT m FROM Medic m
             WHERE
-            m.ativo = true,
-            m.especialidade = :especialidade,
+            m.ativo = true
+            And
+            m.especialidade = :especialidade
+            And
             m.id not in(
                 SELECT s.medic.id FROM Schedule s
                 WHERE
-                s.scheduleDateTime = : dateTime
+                s.scheduleDateTime = :dateTime
             )
-            order by rand()
+            order by RANDOM()
             limit 1
             """)
-    Medic encontraMedicoLivreNaDataPorEspecialidade(Speciality especialidade, LocalDateTime dateTime);
+    Optional<Medic> encontraMedicoLivreNaDataPorEspecialidade(Speciality especialidade, LocalDateTime dateTime);
 }

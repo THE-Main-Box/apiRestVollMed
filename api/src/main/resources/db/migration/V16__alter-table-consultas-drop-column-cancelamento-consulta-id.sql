@@ -1,0 +1,2 @@
+ALTER TABLE consultas
+DROP COLUMN cancelamento_consulta_id;
