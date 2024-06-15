@@ -1,6 +1,7 @@
 package med.voll.api.infra.controller;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/patient")
+@SecurityRequirement(name = "bearer-key")
 public class PatientController {
 
     private PatientDetailedDataDTO detail(Patient patient){

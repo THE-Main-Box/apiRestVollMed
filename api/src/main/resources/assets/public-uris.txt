@@ -1,2 +1,5 @@
 /user/login
 /user/register
+/swagger-ui.html
+/v3/api-docs/**
+/swagger-ui/**

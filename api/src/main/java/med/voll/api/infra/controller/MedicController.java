@@ -1,5 +1,6 @@
 package med.voll.api.infra.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/medic")
+@SecurityRequirement(name = "bearer-key")
 public class MedicController {
 
     @Autowired

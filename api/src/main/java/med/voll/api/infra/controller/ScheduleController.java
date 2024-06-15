@@ -1,5 +1,6 @@
 package med.voll.api.infra.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.dto.schedules.ScheduleCancelDataDTO;
 import med.voll.api.domain.dto.schedules.ScheduleRegisterDataDTO;
@@ -15,6 +16,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/schedule")
+@SecurityRequirement(name = "bearer-key")
 public class ScheduleController {
 
     @Autowired
