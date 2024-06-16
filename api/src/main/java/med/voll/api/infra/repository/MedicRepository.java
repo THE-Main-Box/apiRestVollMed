@@ -14,9 +14,10 @@ import java.util.Optional;
 @Repository
 public interface MedicRepository extends JpaRepository<Medic, Long> {
 
-    Page<Medic> findByEspecialidadeAndAtivo(Speciality especialidade, boolean ativo, Pageable page);
 
-    Page<Medic> findByAtivo( boolean ativo, Pageable page);
+    Page<Medic> findByEspecialidadeAndAtivoTrue(Speciality especialidade, Pageable page);
+
+    Page<Medic> findByAtivoTrue(Pageable page);
 
     @Query("""
             SELECT m FROM Medic m

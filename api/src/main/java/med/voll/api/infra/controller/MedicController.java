@@ -49,7 +49,7 @@ public class MedicController {
     @GetMapping("/list")
     public ResponseEntity<Page<MedicResponseDataDTO>> listMedic(@PageableDefault(size = 10, sort = "nome") Pageable page) {
 
-        return ResponseEntity.ok(repository.findByAtivo(true, page).map(MedicResponseDataDTO::new));
+        return ResponseEntity.ok(repository.findByAtivoTrue(page).map(MedicResponseDataDTO::new));
 
     }
 
@@ -59,7 +59,7 @@ public class MedicController {
     @GetMapping("/list/{especialidade}")
     public ResponseEntity<Page<MedicResponseDataDTO>> listMedicBySpeciality(@PathVariable Speciality especialidade, @PageableDefault(size = 10, sort = "nome") Pageable page) {
 
-        return ResponseEntity.ok((repository.findByEspecialidadeAndAtivo(especialidade, true, page).map(MedicResponseDataDTO::new)));
+        return ResponseEntity.ok((repository.findByEspecialidadeAndAtivoTrue(especialidade, page).map(MedicResponseDataDTO::new)));
 
     }
 
