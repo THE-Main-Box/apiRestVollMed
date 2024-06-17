@@ -43,6 +43,13 @@ public class Patient {
         this.telefone =dataDTO.telefone();
     }
 
+    public Patient(String nome, String email, String CPF, String telefone) {
+        this.nome = nome;
+        this.email = email;
+        this.CPF = CPF;
+        this.telefone = telefone;
+    }
+
     public void updateData(PatientUpdateData dataDTO){
         this.nome = dataDTO.nome();
         this.endereco = new CompleteAdress(dataDTO.endereco());

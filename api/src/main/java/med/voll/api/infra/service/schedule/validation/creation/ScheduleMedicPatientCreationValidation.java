@@ -33,7 +33,7 @@ public class ScheduleMedicPatientCreationValidation implements ValidatorCreatorO
         Patient patient = patientRepository.getReferenceById(dataDTO.patientId());
         LocalDateTime dayOfYear = dataDTO.scheduleDateTime();
 
-        if (scheduleRepository.findByPatient(patient.getId(), dayOfYear).isPresent()) {
+        if (scheduleRepository.findByPatientInDayOfYear(patient.getId(), dayOfYear).isPresent()) {
             throw new ScheduleIntegrityException("Um paciente só pode ter uma consulta agendada por dia");
         } else if (!patientRepository.existsById(dataDTO.patientId())) {
             throw new ScheduleIntegrityException("Paciente não existe");

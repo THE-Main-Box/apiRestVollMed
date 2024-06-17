@@ -36,6 +36,7 @@ public class Medic {
     private CompleteAdress endereco;
 
 
+    @Transient
     @OneToMany(mappedBy = "medic",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Schedule> consults = new ArrayList<>();
 
@@ -47,6 +48,16 @@ public class Medic {
         this.endereco = new CompleteAdress(dataDTO.endereco());
         this.telefone = dataDTO.telefone();
         this.ativo = true;
+    }
+
+    public Medic(String nome, String email, String crm, String telefone, Speciality especialidade) {
+        this.nome = nome;
+        this.email = email;
+        this.crm = crm;
+        this.telefone = telefone;
+        this.especialidade = especialidade;
+        this.ativo = true;
+        this.endereco = null;
     }
 
     public void updateData(MedicUpdateDataDTO dataDTO) {

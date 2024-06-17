@@ -17,7 +17,7 @@ public class ScheduleCreationMedicAvaliableValidator implements ValidatorCreator
     @Override
     public void validate(ScheduleRegisterDataDTO dataDTO) {
 
-        if (scheduleRepository.findByMedic(dataDTO.medicId(), dataDTO.scheduleDateTime()).isPresent()) {
+        if (scheduleRepository.findByMedicInDayOfYear(dataDTO.medicId(), dataDTO.scheduleDateTime()).isPresent()) {
             throw new ScheduleIntegrityException("Este médico já possui uma consulta agendada para esta DATA: "
                     + dataDTO.scheduleDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "às: " +
                     dataDTO.scheduleDateTime().format(DateTimeFormatter.ofPattern("HH:mm"))
