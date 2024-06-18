@@ -73,6 +73,9 @@ class ScheduleControllerTest {
         // Cria e salva o paciente apenas uma vez
         patient = new Patient("patient", "patient@gmail.com", "00011133344", "8100011122");
         patient = patientRepository.save(patient);
+
+        schedule = new Schedule(nextMondayAt10, medic, patient);
+        schedule = scheduleRepository.save(schedule);
     }
 
     @Test
@@ -149,9 +152,6 @@ class ScheduleControllerTest {
     @DisplayName("Deveria devolver http:200 ao cancelar um agendamento válido")
     @WithMockUser
     void cancelSchedule_Scene1() throws Exception {
-        // Salva o agendamento no banco de dados
-        schedule = scheduleRepository.save(new Schedule(nextMondayAt10, medic, patient));
-
         ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(schedule.getId(), "Cancelando agendamento");
 
         var response = mvc.perform(put(SCHEDULE_CANCEL_URL)

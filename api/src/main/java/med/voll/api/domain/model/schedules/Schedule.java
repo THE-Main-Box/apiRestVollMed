@@ -18,11 +18,11 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {/*CascadeType.PERSIST,*/ CascadeType.MERGE})
     @JoinColumn(name = "medico_id")
     private Medic medic;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {/*CascadeType.PERSIST,*/ CascadeType.MERGE})
     @JoinColumn(name = "paciente_id")
     private Patient patient;
 
