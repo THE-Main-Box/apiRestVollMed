@@ -74,9 +74,9 @@ class ScheduleControllerTest {
 
     }
 
-//    private void registerSchedule(){
-//        schedule = scheduleRepository.save(new Schedule(nextMondayAt10, medic, patient));
-//    }
+    private void saveSchedule(){
+        schedule = scheduleRepository.save(new Schedule(nextMondayAt10, medic, patient));
+    }
 
     @Test
     @DisplayName("Deveria devolver http:400 caso dados não estejam sendo passados corretamente")
@@ -154,6 +154,7 @@ class ScheduleControllerTest {
     @DisplayName("Deveria devolver http:200 ao cancelar um agendamento válido")
     @WithMockUser
     void cancelSchedule_Scene1() throws Exception {
+        this.saveSchedule();
         ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(schedule.getId(), "Cancelando agendamento");
 
         var response = mvc.perform(put(SCHEDULE_CANCEL_URL)
@@ -168,6 +169,7 @@ class ScheduleControllerTest {
     @DisplayName("Deveria devolver http:400 ao tentar cancelar um agendamento válido sem possuir um motivo de cancelamento")
     @WithMockUser
     void cancelSchedule_Scene2() throws Exception {
+        this.saveSchedule();
         ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(schedule.getId(), null);
 
         var response = mvc.perform(put(SCHEDULE_CANCEL_URL)
@@ -193,7 +195,7 @@ class ScheduleControllerTest {
     }
 
     @Test
-    @DisplayName("Deveria devolver http:500 ao tentar cancelar um agendamento que não existe")
+    @DisplayName("Deveria devolver http:404 ao tentar cancelar um agendamento que não existe")
     @WithMockUser
     void cancelSchedule_Scene4() throws Exception {
         ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(1111L, "teste");
