@@ -52,13 +52,6 @@ public class ScheduleRepositoryTest {
         this.schedule = new Schedule(this.nextMondayAt10, this.medic, this.patient);
     }
 
-    @AfterEach
-    void cleanupTestData() {
-        scheduleRepository.deleteAll();
-        patientRepository.deleteAll();
-        medicRepository.deleteAll();
-    }
-
     /*//FIND BY PATIENT\\*/
 
     @Test

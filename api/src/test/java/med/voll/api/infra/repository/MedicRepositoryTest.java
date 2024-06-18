@@ -67,9 +67,4 @@ class MedicRepositoryTest {
         assertThat(freeMedic.get()).isEqualTo(medic);
     }
 
-    @AfterEach
-    void cleanupTestData() {
-        scheduleRepository.deleteAll();
-        medicRepository.deleteAll();
-    }
 }

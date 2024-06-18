@@ -41,6 +41,8 @@ public class ScheduleMedicPatientCreationValidation implements ValidatorCreatorO
             throw new ScheduleIntegrityException("Medico não existe");
         } else if (medic != null &&!medic.isAtivo()) {
             throw new ScheduleIntegrityException("A id do médico deve pertencer a um médico ativo na plataforma");
+        } else if (medic == null && dataDTO.especialidade() == null) {
+            throw new ScheduleIntegrityException("pelo menos a id ou a especialidade do médico deve ser passada");
         }
     }
 }

@@ -42,4 +42,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             EXTRACT(DAY FROM s.scheduleDateTime) = EXTRACT(DAY FROM CAST(:dateTime AS TIMESTAMP))
             """)
     Optional<Schedule> findByMedicInDayOfYear(Long medicId, LocalDateTime dateTime);
+
 }
