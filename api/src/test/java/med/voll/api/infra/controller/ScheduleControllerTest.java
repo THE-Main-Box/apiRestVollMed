@@ -66,20 +66,20 @@ class ScheduleControllerTest {
     public void setTestData() {
         nextMondayAt10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
 
-        // Cria e salva o médico apenas uma vez
-        medic = new Medic("medic", "medic@voll.med", "123456", "7100004444", Speciality.CARDIOLOGIA);
-        medic = medicRepository.save(medic);
+        // Cria e salva o médico apenas uma vez com valores padrões
+        medic = medicRepository.save(new Medic("medic", "medic@voll.med", "123456", "7100004444", Speciality.CARDIOLOGIA));
 
-        // Cria e salva o paciente apenas uma vez
-        patient = new Patient("patient", "patient@gmail.com", "00011133344", "8100011122");
-        patient = patientRepository.save(patient);
+        // Cria e salva o paciente apenas uma vez com valores padrões
+        patient = patientRepository.save(new Patient("patient", "patient@gmail.com", "00011133344", "8100011122"));
 
-        schedule = new Schedule(nextMondayAt10, medic, patient);
-        schedule = scheduleRepository.save(schedule);
     }
 
+//    private void registerSchedule(){
+//        schedule = scheduleRepository.save(new Schedule(nextMondayAt10, medic, patient));
+//    }
+
     @Test
-    @DisplayName("Deveria devolver http:400 caso dados estejam sendo passados incorretamente")
+    @DisplayName("Deveria devolver http:400 caso dados não estejam sendo passados corretamente")
     @WithMockUser
     void registerSchedule_Scene1() throws Exception {
         var invalidData = new ScheduleRegisterDataDTO(null, null, null, null);
@@ -148,6 +148,8 @@ class ScheduleControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
+//    CANCELAMENTO
+
     @Test
     @DisplayName("Deveria devolver http:200 ao cancelar um agendamento válido")
     @WithMockUser
@@ -161,4 +163,47 @@ class ScheduleControllerTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
+
+    @Test
+    @DisplayName("Deveria devolver http:400 ao tentar cancelar um agendamento válido sem possuir um motivo de cancelamento")
+    @WithMockUser
+    void cancelSchedule_Scene2() throws Exception {
+        ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(schedule.getId(), null);
+
+        var response = mvc.perform(put(SCHEDULE_CANCEL_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelData)))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("Deveria devolver http:400 ao tentar cancelar um agendamento válido sem possuir um id")
+    @WithMockUser
+    void cancelSchedule_Scene3() throws Exception {
+        ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(null, "teste");
+
+        var response = mvc.perform(put(SCHEDULE_CANCEL_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelData)))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("Deveria devolver http:500 ao tentar cancelar um agendamento que não existe")
+    @WithMockUser
+    void cancelSchedule_Scene4() throws Exception {
+        ScheduleCancelDataDTO cancelData = new ScheduleCancelDataDTO(1111L, "teste");
+
+        var response = mvc.perform(put(SCHEDULE_CANCEL_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cancelData)))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
 }
