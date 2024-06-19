@@ -30,30 +30,27 @@ class MedicRepositoryTest {
     private MedicRepository medicRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private PatientRepository patientRepository;
+
     private LocalDateTime nextMondayAt10;
     private Medic medic;
     private Patient patient;
     private Schedule schedule;
 
-    private void saveMedic() {
-        medicRepository.save(medic);
-    }
-    private void saveSchedule() {
-        scheduleRepository.save(schedule);
-    }
-    public MedicRepositoryTest() {
+    @BeforeEach
+    public void saveSchedule() {
         this.nextMondayAt10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY))
                 .atTime(10, 0);
-        this.medic = new Medic("medic", "medic@voll.med", "123456", "7100004444", Speciality.CARDIOLOGIA);
-        this.patient = new Patient("patient", "patient@gmail.com", "00011133344", "8100011122");
-        this.schedule = new Schedule(this.nextMondayAt10, this.medic, this.patient);
+        this.medic = medicRepository.save(new Medic("medic", "medic@voll.med", "123456", "7100004444", Speciality.CARDIOLOGIA));;
+        this.patient = patientRepository.save(new Patient("patient", "patient@gmail.com", "00011133344", "8100011122"));
+        this.schedule = scheduleRepository.save(new Schedule(this.nextMondayAt10, this.medic, this.patient));
     }
 
     @Test
     @DisplayName("Devolve null quando há um médico cadastrado, porém não pode atendê-lo em tal horário")
     void encontraMedicoLivreNaDataPorEspecialidade_Scene1() {
-        saveMedic();
-        saveSchedule();
         Optional<Medic> freeMedic = medicRepository.encontraMedicoLivreNaDataPorEspecialidade(Speciality.CARDIOLOGIA, nextMondayAt10);
         assertThat(freeMedic).isEmpty();
     }
@@ -61,8 +58,6 @@ class MedicRepositoryTest {
     @Test
     @DisplayName("Devolve um médico que está disponivel no seu horário")
     void encontraMedicoLivreNaDataPorEspecialidade_Scene2() {
-        saveMedic();
-        saveSchedule();
         Optional<Medic> freeMedic = medicRepository.encontraMedicoLivreNaDataPorEspecialidade(Speciality.CARDIOLOGIA, nextMondayAt10.plusDays(1));
         assertThat(freeMedic.get()).isEqualTo(medic);
     }
